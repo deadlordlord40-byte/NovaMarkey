@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovaMart Store</title>
+<title>NovaMarkey Store</title>
 <style>
 body {
   margin: 0;
@@ -101,24 +101,17 @@ header h1 { margin: 0; font-size: 28px; }
   border-radius: 8px;
   object-fit: cover;
 }
-.cart-item img {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  object-fit: cover;
-}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>NovaMart</h1>
+  <h1>NovaMarkey</h1>
 
   <div class="search-box">
     <input id="searchInput" placeholder="Search products...">
     <button onclick="filterProducts()">Search</button>
   </div>
-
 
   <div class="cart-btn" onclick="openCart()">Cart (<span id="cartCount">0</span>)</div>
 </header>
@@ -148,8 +141,7 @@ const products = [
   {id:10,name:"Anti Acne Serum",price:59,img:"https://successchaserstars.com/assets/img/d302dda160ceffd08acbd73b2557c474.png"},
   {id:11,name:"Alovera Jiuce",price:59,img:"https://successchaserstars.com/assets/img/108957b0aa57a17b7cc489b80deea59d.png"},
   {id:12,name:"Natural Growth Hair Shampoo",price:59,img:"https://successchaserstars.com/assets/img/676d2e4aa15433c5dbfa143542d7fd59.png"},
-  
-]
+];
 
 let cart = [];
 
@@ -162,7 +154,7 @@ function renderProducts(list = products) {
       <div class="card">
         <img src="${p.img}" alt="">
         <h3>${p.name}</h3>
-        <p>Rs${p.price}</p>
+        <p>Rs ${p.price}</p>
         <div class="btn" onclick="buyProduct('${p.name}')">Buy</div>
       </div>
     `;
@@ -170,17 +162,23 @@ function renderProducts(list = products) {
 }
 renderProducts();
 
+/* Buy button opens Google Form */
 function buyProduct(name) {
-  // Example: alert, can replace with your form or buy function
-  alert("You clicked Buy for " + name);
+  const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSfRS52UqYskicp28x8-kPO5i96yBC2othRfTO5Cjb9L9aGpKg/viewform?usp=dialog";
+  window.open(formURL, "_blank");
 }
 
 /* Search Filter: always return all products if no match */
 function filterProducts() {
   const q = document.getElementById("searchInput").value.toLowerCase();
   const filtered = products.filter(p => p.name.toLowerCase().includes(q));
-  if (filtered.length === 0) renderProducts(products); // show all if nothing matches
+  if (filtered.length === 0) renderProducts(products);
   else renderProducts(filtered);
+}
+
+/* Cart functions (placeholder, can be enhanced) */
+function openCart() {
+  alert("Cart feature coming soon!");
 }
 </script>
 
