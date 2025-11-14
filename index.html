@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaMart Store</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1622;
+  color: white;
+}
+
+/* Header */
+header {
+  padding: 20px;
+  background: #09111b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header h1 { margin: 0; font-size: 28px; }
+
+/* Search */
+.search-box {
+  display: flex;
+  width: 100%;
+  max-width: 450px;
+}
+.search-box input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px 0 0 8px;
+  border: none;
+}
+.search-box button {
+  padding: 10px 20px;
+  border-radius: 0 8px 8px 0;
+  border: none;
+  background: #ff5722;
+  color: white;
+  cursor: pointer;
+}
+
+/* Grid */
+.products {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(230px,1fr));
+  gap: 20px;
+}
+.card {
+  background: #112031;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+}
+.card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.card h3 { margin: 10px 0 5px; }
+.card p { margin: 5px 0; }
+
+.btn {
+  display: inline-block;
+  margin-top: 10px;
+  background: #ff5722;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Cart */
+.cart-btn {
+  padding: 10px 20px;
+  background: #ff5722;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#cartSection {
+  padding: 20px;
+}
+
+.cart-item {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  background: #112031;
+  padding: 12px;
+  border-radius: 10px;
+}
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>NovaMart</h1>
+
+  <div class="search-box">
+    <input id="searchInput" placeholder="Search products...">
+    <button onclick="filterProducts()">Search</button>
+  </div>
+
+
+  <div class="cart-btn" onclick="openCart()">Cart (<span id="cartCount">0</span>)</div>
+</header>
+<marquee bgcolor="orange">This Website is only base on cash on delivery</marquee>
+
+<!-- PRODUCT GRID -->
+<div class="products" id="productGrid"></div>
+
+<!-- CART -->
+<section id="cartSection" style="display:none;">
+  <h2>Your Cart</h2>
+  <div id="cartItems"></div>
+  <h3>Total: Rs <span id="cartTotal">0</span></h3>
+</section>
+
+<script>
+const products = [
+  {id:1,name:"Talbina",price:30,img:"https://s2.ezgif.com/tmp/ezgif-269283c6896f7d19.png"},
+  {id:2,name:"Glutathione Face Wash",price:79,img:"https://s2.ezgif.com/tmp/ezgif-29c292a5107f05ee.png"},
+  {id:3,name:"Vitamin-C Face Wash",price:89,img:"https://s2.ezgif.com/tmp/ezgif-27777f1390c6ca39.png"},
+  {id:4,name:"Slim Pro Syrup",price:29,img:"https://successchaserstars.com/assets/img/490e5091462f9bd91eb28db30dda4677.jpg"},
+  {id:5,name:"Anti-Acne Face Wash",price:99,img:"https://successchaserstars.com/assets/img/4739e5376b63f1828d14e81f7eb6268d.png"},
+  {id:6,name:"Acne Treatment Gel Skin Mask",price:129,img:"https://successchaserstars.com/assets/img/69197318d8cbe138ab6cc2429e217ffe.jpg"},
+  {id:7,name:"Glow Skin Face Gel Mask",price:169,img:"https://successchaserstars.com/assets/img/74dac073564a9b57645f147285598615.jpg"},
+  {id:8,name:"Vitamin-C Gel Skin Mask",price:399,img:"https://successchaserstars.com/assets/img/410b814d043cb5ac3f354b1850b9bd75.png"},
+  {id:9,name:"Stars beauty Cream",price:199,img:"https://successchaserstars.com/assets/img/d335cff5ee42251fe8cc0671c49fa574.png"},
+  {id:10,name:"Anti Acne Serum",price:59,img:"https://successchaserstars.com/assets/img/d302dda160ceffd08acbd73b2557c474.png"},
+  {id:11,name:"Alovera Jiuce",price:59,img:"https://successchaserstars.com/assets/img/108957b0aa57a17b7cc489b80deea59d.png"},
+  {id:12,name:"Natural Growth Hair Shampoo",price:59,img:"https://successchaserstars.com/assets/img/676d2e4aa15433c5dbfa143542d7fd59.png"},
+  
+]
+
+let cart = [];
+
+/* Render Products */
+function renderProducts(list = products) {
+  const grid = document.getElementById("productGrid");
+  grid.innerHTML = "";
+  list.forEach(p => {
+    grid.innerHTML += `
+      <div class="card">
+        <img src="${p.img}" alt="">
+        <h3>${p.name}</h3>
+        <p>Rs${p.price}</p>
+        <div class="btn" onclick="buyProduct('${p.name}')">Buy</div>
+      </div>
+    `;
+  });
+}
+renderProducts();
+
+function buyProduct(name) {
+  // Example: alert, can replace with your form or buy function
+  alert("You clicked Buy for " + name);
+}
+
+/* Search Filter: always return all products if no match */
+function filterProducts() {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const filtered = products.filter(p => p.name.toLowerCase().includes(q));
+  if (filtered.length === 0) renderProducts(products); // show all if nothing matches
+  else renderProducts(filtered);
+}
+</script>
+
+</body>
+</html>
