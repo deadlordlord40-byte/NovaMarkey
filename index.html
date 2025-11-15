@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NovaMarkey Store</title>
+
 <style>
 body {
   margin: 0;
@@ -12,7 +13,45 @@ body {
   color: white;
 }
 
-/* Header */
+/* ---------------- SPLASH SCREEN ---------------- */
+#splash {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeOut 3s forwards;
+}
+
+#splash img {
+  width: 500px;
+  height: 250px;
+  margin-bottom: 20px;
+}
+
+#splash h1 {
+  font-size: 35px;
+  color: #000000;
+  text-shadow: 0 0 20px #000000;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #ff0000; }
+  to   { text-shadow: 0 0 30px #fc0000; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* ------------ MAIN CONTENT AFTER SPLASH ----------- */
 header {
   padding: 20px;
   background: #09111b;
@@ -22,7 +61,6 @@ header {
 }
 header h1 { margin: 0; font-size: 28px; }
 
-/* Search */
 .search-box {
   display: flex;
   width: 100%;
@@ -43,7 +81,6 @@ header h1 { margin: 0; font-size: 28px; }
   cursor: pointer;
 }
 
-/* Grid */
 .products {
   padding: 20px;
   display: grid;
@@ -68,29 +105,21 @@ header h1 { margin: 0; font-size: 28px; }
 .btn {
   display: inline-block;
   margin-top: 10px;
-  background: #ff5722;
+  background: #ff8000;
   color: white;
   padding: 8px 16px;
   border-radius: 10px;
-  cursor: pointer;
-}
-.cart-item {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
-  background: #112031;
-  padding: 12px;
-  border-radius: 10px;
-}
-.cart-item img {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  object-fit: cover;
+  cursor: pointer;  
 }
 </style>
 </head>
 <body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <img src="https://s1.ezgif.com/tmp/ezgif-17f5c6dfb589cee5.png " alt="Logo" id="splash-logo">
+  <h1>NovaMarkey</h1>
+</div>
 
 <header>
   <h1>NovaⓂ️arkey</h1>
@@ -99,20 +128,12 @@ header h1 { margin: 0; font-size: 28px; }
     <input id="searchInput" placeholder="Search products...">
     <button onclick="filterProducts()">Search</button>
   </div>
-
-  
 </header>
-<marquee bgcolor="orange">This Website is only base on cash on delivery</marquee>
+
+<marquee bgcolor="orange">This Website is only based on cash on delivery</marquee>
 
 <!-- PRODUCT GRID -->
 <div class="products" id="productGrid"></div>
-
-<!-- CART -->
-<section id="cartSection" style="display:none;">
-  <h2>Your Cart</h2>
-  <div id="cartItems"></div>
-  <h3>Total: Rs <span id="cartTotal">0</span></h3>
-</section>
 
 <script>
 const products = [
@@ -130,50 +151,32 @@ const products = [
   {id:12,name:"Natural Growth Hair Shampoo",price:1092,img:"https://successchaserstars.com/assets/img/676d2e4aa15433c5dbfa143542d7fd59.png"},
 ];
 
-let cart = [];
-
-/* Render Products */
 function renderProducts(list = products) {
   const grid = document.getElementById("productGrid");
   grid.innerHTML = "";
   list.forEach(p => {
     grid.innerHTML += `
       <div class="card">
-        <img src="${p.img}" alt="">
+        <img src="${p.img}">
         <h3>${p.name}</h3>
         <p>Rs ${p.price}</p>
         <div class="btn" onclick="buyProduct('${p.name}')">Buy</div>
-      </div>
-    `;
+      </div>`;
   });
 }
 renderProducts();
 
-/* Buy button opens Google Form */
 function buyProduct(name) {
   const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSfRS52UqYskicp28x8-kPO5i96yBC2othRfTO5Cjb9L9aGpKg/viewform?usp=dialog";
   window.open(formURL, "_blank");
 }
 
-/* Search Filter: always return all products if no match */
 function filterProducts() {
   const q = document.getElementById("searchInput").value.toLowerCase();
   const filtered = products.filter(p => p.name.toLowerCase().includes(q));
-  if (filtered.length === 0) renderProducts(products);
-  else renderProducts(filtered);
-}
-
-/* Cart functions (placeholder, can be enhanced) */
-function openCart() {
-  alert("Cart feature coming soon!");
+  renderProducts(filtered.length ? filtered : products);
 }
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
